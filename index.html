@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/default_layout}"
+      layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>CBL</title>
+    <script src="https://uicdn.toast.com/tui.grid/latest/tui-grid.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.grid/latest/tui-grid.css">
+</head>
+<style>
+    .box {
+        padding: 5px 12px;
+        margin: 12px;
+        border: 1px solid black;
+    }
+
+    .setdate {
+        float: left;
+        width: 50%;
+        text-align: center;
+        margin-top: auto;
+    }
+
+    .btn {
+        margin: 12px;
+    }
+
+    .tab {
+        display: none;
+    }
+
+</style>
+<body>
+<div class="box">
+    <h1>전력 사용량 차트</h1>
+    <p>
+        오늘 : 오늘 날짜에 해당하는 모든 시간대의 CBL</br>
+        최근 : 저장된 데이터 중 가장 최신인 24개의 CBL</br>
+        검색 : 입력한 날짜에 해당하는 모든 시간대의 CBL</br>
+    </p>
+</div>
+
+<!-- Set Date -->
+<div class="setdate">
+    <input type="button" onclick="shiftDate(value)" value="<"/>
+    <input type='date' id='commandDate' required/>
+    <input type="button" onclick="shiftDate(value)" value=">"/>
+</div>
+
+<!-- Tab links -->
+<div class="btn">
+    <input type="button" id="bntToday" value="오늘" onclick="getCBL('chtToday', 'grToday', '/cbl', 'post', {'commandDate' : new Date('2023-07-15').format('yyyy-MM-dd')})"/>
+    <input type="button" id="bntRecent" value="최근" onclick="getCBL('chtRecent', 'grRecent', '/cbl/recent', 'post', {'commandDate' : new Date().format('yyyy-MM-dd'), 'limit' : 12})"/>
+    <input type="button" id="bntSearch" value="검색" onclick="getCBL('chtSearch', 'grSearch', '/cbl', 'post', {'commandDate' : $('#commandDate').val()})"/>
+</div>
+
+<!-- Show Data -->
+<div class="tab" id="bntTodayTab">
+    <div id="chtToday"></div>
+    <div id="grToday"></div>
+</div>
+
+
+
+<script>
+    let grids = {};
+    $(function () {
+        init();
+    });
+
+    function init() {
+        document.getElementById("commandDate").valueAsDate = new Date();
+        document.getElementById("commandDate").max = new Date().toISOString().split("T")[0];
+
+        $('.btn input[type="button"]').click(function() {
+            let btnId = $(this).attr('id');
+            $('.tab').hide();
+            $('#' + btnId + 'Tab').show();
+        })
+    }
+
+    function shiftDate(v) {
+        let date = new Date($("#commandDate").val());
+
+        if (v === '<') {
+            date.setDate(date.getDate() - 1);
+        }
+        if (v === '>') {
+            date.setDate(date.getDate() + 1);
+        }
+
+        document.getElementById("commandDate").valueAsDate = date;
+    }
+
+    function getCBL(chtId, grId, url, httpMethod, param) {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: url,
+                contentType: 'application/json; charset=utf-8',
+                type: (httpMethod === null) ? "GET" : httpMethod,
+                data: JSON.stringify(param),
+                dataType: "json",
+                success: function (response) {
+                    resolve(response);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("get data error");
+                    reject();
+                }
+            })
+        }).then(function (data) {
+            drawChart(chtId, data['chart']);
+            drawGrid(grId, data['grid']);
+        });
+    }
+
+    function drawChart(id, val) {
+        if (gf_IsNull(val)) {
+            alert("Unsaved CBL List");
+            return;
+        }
+
+        let mid610 = {
+            x: val['CBL_TIME'],
+            y: val['MID610'],
+            mode: 'lines+markers',
+            name: 'MID610'
+        };
+
+        let mid46 = {
+            x: val['CBL_TIME'],
+            y: val['MID46'],
+            mode: 'lines+markers',
+            name: 'MID46'
+        };
+
+        let mid810 = {
+            x: val['CBL_TIME'],
+            y: val['MID810'],
+            mode: 'lines+markers',
+            name: 'MID810'
+        };
+
+        let data = [mid610, mid46, mid810];
+
+        let layout = {
+            title: id,
+            xaxis: {
+                title: 'command datetime'
+            },
+            yaxis: {
+                title: 'CBL value'
+            }
+        };
+
+        Plotly.newPlot(id, data, layout);
+    }
+
+    // function drawGrid(id, data) {
+    //     // const instance = {
+    //     //     el: document.getElementById(id),
+    //     //     data: data
+    //     // }
+    //     myGrid.el = document.getElementById(id);
+    //     myGrid.resetData(data);
+    //     // return new myGrid(instance);
+    // }
+
+    function drawGrid(id, data) {
+        if (id in grids){
+            grids[id].resetData(data);
+        }else {
+            const instance = new tui.Grid({
+                el: document.getElementById(id),
+                data: data,
+                columns: [
+                    {header: 'Datetime', name: 'CBL_TIME'},
+                    {header: 'MID610', name: 'MID610'},
+                    {header: 'MID46', name: 'MID46'},
+                    {header: 'MID810', name: 'MID810'},
+                ]
+            });
+            instance.resetData(data);
+            grids[id] = instance;
+        }
+    }
+
+</script>
+</body>
+</html>
