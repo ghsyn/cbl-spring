@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<label for="captcha" style="display:block">자동 로그인 방지 Sample</label>
+<div style="overflow:hidden">
+    <div style="float:left">
+        <img title="캡차이미지" src="/captcha/getImage" alt="캡차이미지"/>
+        <div id="ccaudio" style="display:none"></div>
+    </div>
+</div>
+<div style="padding:3px">
+    <input id="reload" type="button" onclick="getCaptchaImage();" value="새로고침"/>
+    <input id="soundOn" type="button" onclick="getCaptchaAudio();" value="음성듣기"/>
+</div>
+<div style="padding:3px">
+    <input id="answer" type="text" value="">
+    <input id="check" type="button" value="확인"/>
+</div>
+
+<script>
+    function getCaptchaAudio(){
+        let rand = Math.random();
+        let uAgent = navigator.userAgent;
+        let soundUrl = '/captcha/getAudio?rand='+rand;
+
+        if(uAgent.indexOf('Trident')>-1 || uAgent.indexOf('MISE')>-1){	/*IE 경우 */
+            audioPlayer(soundUrl);
+        }else if(!!document.createElement('audio').canPlayType){ /*Chrome 경우 */
+            try {
+                new Audio(soundUrl).play();
+            } catch (e) {
+                audioPlayer(soundUrl);
+            }
+        }else{
+            window.open(soundUrl,'','width=1,height=1');
+        }
+    }
+    function getCaptchaImage(){
+        var rand = Math.random();
+        var url = '/captcha/getAudio?rand='+rand;
+        document.querySelector('img').setAttribute('src', url);
+    }
+    function audioPlayer(objUrl){
+        document.querySelector('#ccaudio').innerHTML = '<bgsoun src="' +objUrl +'">';
+    }
+</script>
+</body>
+</html>

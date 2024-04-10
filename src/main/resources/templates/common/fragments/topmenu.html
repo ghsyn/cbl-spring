@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="TopMenu">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        .navbar a {
+            float: left;
+            font-size: 16px;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .dropdown {
+            float: left;
+            overflow: hidden;
+        }
+
+        .dropdown .dropbtn {
+            font-size: 16px;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 14px 16px;
+            background-color: inherit;
+            font-family: inherit;
+            margin: 0;
+        }
+
+        .navbar a:hover, .dropdown:hover .dropbtn {
+            background-color: red;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            float: none;
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+
+    <div class="navbar">
+         <div class="dropdown">
+             <div class="dropbtn">File
+                <i class="fa fa-caret-down"></i>
+              </div>
+              <div class="dropdown-content">
+                    <a href="#">New</a>
+                    <a href="#">Open</a>
+                    <a href="#">Opne Last</a>
+                    <a href="#">Save..</a>
+                    <a href="#">Page Setup</a>
+                    <a href="#">report</a>
+                    <a href="#">Export to CSV</a>
+                    <a href="#">Logout</a>
+                </div>
+           </div>
+            <div class="dropdown">
+                <div class="dropbtn">Text
+                    <i class="fa fa-caret-down"></i>
+                </div>
+                <div class="dropdown-content">
+                    <a href="#">Start</a>
+                    <a href="#">Pause</a>
+                    <a href="#">Stop</a>
+                    <a href="#">Recall Last Calibration</a>
+                    <a href="#">Snapshot Viewer</a>
+                    <a href="#">Pass/Fail Limits</a>
+                </div>
+            </div>
+        <div class="dropdown">
+            <div class="dropbtn">Setup
+                <i class="fa fa-caret-down"></i>
+            </div>
+            <div class="dropdown-content">
+                <a href="#">Ac Analysis</a>
+                <a href="#">DC Testing</a>
+                <a href="#">Report Settings..</a>
+                <a href="#">License Manager..</a>
+                <a href="#">Office Mode</a>
+                <a href="#">Normal Mode</a>
+                <a href="#">Advanced Mode</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <div class="dropbtn">RIVs
+                <i class="fa fa-caret-down"></i>
+            </div>
+            <div class="dropdown-content">
+                <a href="#">Settings</a>
+                <a href="#">Referenct Calibration</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <div class="dropbtn">Help
+                <i class="fa fa-caret-down"></i>
+            </div>
+            <div class="dropdown-content">
+                <a href="#">Manual</a>
+                <a href="#">About</a>
+            </div>
+        </div>
+
+    </div>
+
+</html>

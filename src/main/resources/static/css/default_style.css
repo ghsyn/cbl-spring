@@ -1,0 +1,207 @@
+/************전력정비산업 품질플랫폼 기본(공통) 스타일************/
+
+span,p, h1, h2{margin-block-start:0; margin-block-end:0;}
+a, a:hover, a:visited, a:link, a:active{text-decoration:none; cursor:pointer; color:#000;}
+/* body{margin:0; background-image:url("/resources/images/bg_sub01.png"); background-position:-293px -347px; background-repeat:no-repeat; font-family:"Malgun Gothic"} */
+body{margin:0; font-family:"Malgun Gothic"}
+
+.gridSelRowColor { background-color: #e0e8f5 !important;} /* 2022.12.07 정석인 추가 */
+
+.allWrap{display:flex; width:100%;}
+.sideMenuBar {
+    height: 100vh;
+    background: linear-gradient(180deg, #0151a3, #08173b);
+    position: fixed;
+    z-index: 100;
+}
+
+.programName {
+    width: 90%;
+    text-align: right;
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 30px;
+}
+
+.titleName {
+    font-size: 38px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.subInputText::placeholder{color:#bbb !important; font-weight:300 !important; font-size:16px !important;}
+textarea::placeholder{color:#bbb !important; font-weight:300 !important; font-size:16px !important;}
+
+:-ms-input-placeholder {
+    color: #bbb !important;
+    font-weight: 300 !important;
+}
+
+.subSelect{color:#0f4b9f; font-weight:600; font-size: 16px; border:1px solid #0f4b9f; border-radius:4px;height:26px; margin-right:30px;}
+.subInputText {
+    color: #0f4b9f;
+    font-weight: 600;
+    font-size: 16px;
+    border: 1px solid #0f4b9f;
+    border-radius: 4px;
+    height: 26px;
+    margin-right: 30px;
+}
+
+.subInputBtn {
+	height:28px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px !important;
+    padding: 0 17px 2px 20px !important;
+    background: #fff;
+    border:none;
+    border-radius: 4px;
+    background:linear-gradient(120deg, #2366c4, #0f4b9f);
+    box-shadow: 1px 2px 1px 1px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    margin-right: 7px !important;
+    margin-left: 7px !important;
+    letter-spacing: 3px;
+}
+.subInputBtn_02 {
+    color: #0f4b9f;
+    font-weight: 600;
+    font-size: 16px !important;
+    padding: 0 17px 3px 20px !important;
+    background: #fff;
+    border: 1px solid #0f4b9f;
+    border-radius: 4px;
+    box-shadow: 1px 2px 1px 1px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    margin-right: 7px !important;
+    margin-left: 7px !important;
+    letter-spacing: 3px;
+}
+
+.inputTitle {
+    color: #0f4b9f;
+    font-weight: 600;
+    font-size: 16px;
+    margin-right: 10px;
+}
+.contentTitle{display:flex; align-items:center; height:40px; background:linear-gradient(180deg, #3576dd, #2c5faf);}
+.contentTitle>p{color:#fff; width:100%;  font-size:18px; font-weight:600; text-indent:20px; margin-top:-5px;}
+textarea{color:#0f4b9f; font-weight:600; font-size: 16px; border:1px solid #0f4b9f; border-radius:4px;height:26px; margin-right:30px;}
+
+.detailTable01{width:100%; border:1px solid #438bdc;}
+.detailTable01 th{height:50px; background:#f8fbff; font-size:16px; font-weight:600; text-align:left; text-indent:20px;}
+.detailTable01 th.noneStar{text-indent:27px;}
+.detailTable01 th span{color:#d4585f; font-weight:600;}
+.detailTable01 td{height:50px; font-size:16px; text-indent:10px;}
+.detailTable01 input[type="checkbox"]{cursor:pointer;}
+.detailTable01 label{margin-right:10px; cursor:pointer;}
+.detailTable01 p {
+    color: #d4585f;
+}
+
+.detailTable02 {
+    width: 100%;
+    border: 1px solid #438bdc;
+}
+
+.detailTable02 th {
+    height: 50px;
+    background: #f8fbff;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+    text-indent: 20px;
+}
+
+.detailTable02 th.noneStar {
+    text-indent: 27px;
+}
+
+.detailTable02 th span {
+    color: #d4585f;
+    font-weight: 600;
+}
+
+.detailTable02 td {
+    height: 50px;
+    font-size: 16px;
+    text-indent: 10px;
+}
+
+.detailTable02 input[type="checkbox"] {
+    cursor: pointer;
+}
+
+.detailTable02 label {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.detailTable02 p {
+    color: #000;
+}
+
+.detailTable01 ul {
+    width: 100%;
+    padding: 0;
+}
+
+.detailTable01 li {
+    list-style-type: none;
+    width: auto;
+    float: left;
+    border: 1px solid lightgray;
+    background-color: linen;
+    border-radius: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 3px;
+    text-indent: 0px;
+}
+
+.detailTable03 {
+    width: 100%;
+    border: 1px solid #438bdc;
+}
+
+.detailTable03 th {
+    height: 50px;
+    background: #f8fbff;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+    text-indent: 20px;
+}
+
+.detailTable03 th.noneStar {
+    text-indent: 27px;
+}
+
+.detailTable03 th span {
+    color: #d4585f;
+    font-weight: 600;
+}
+
+.detailTable03 td {
+    height: 50px;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.detailTable03 input[type="checkbox"] {
+    cursor: pointer;
+}
+
+.detailTable03 label {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.detailTable03 p {
+    color: #000;
+}
+
+.detailTable03 td > table{
+    width: 85%;
+}

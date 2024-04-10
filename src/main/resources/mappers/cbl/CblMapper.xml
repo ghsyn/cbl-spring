@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="itman.com.web.cbl.mapper.CblMapper">
+
+    <sql id="selectDrscbl">
+        SELECT DATE_FORMAT(CBL_TIME, '%Y-%m-%d %T') AS CBL_TIME,
+               ROUND(MID610, 2) AS MID610,
+               ROUND(MID46,2) MID46,
+               ROUND(MID810,2) MID810
+        FROM DR_SCBL
+    </sql>
+
+    <select id="selectCblAsDate" resultType="map" parameterType="string">
+        <include refid="selectDrscbl"/>
+        WHERE CBL_TIME LIKE CONCAT(#{commandDate},'%')
+    </select>
+
+    <select id="selectCblWithLimit" resultType="map" parameterType="map">
+        <include refid="selectDrscbl"/>
+        WHERE CBL_TIME <![CDATA[ < ]]> (DATE_FORMAT(#{commandDate},'%Y-%m-%d %HH:%mm:%ss')) ORDER BY CBL_TIME DESC LIMIT ${limit}
+    </select>
+
+    <insert id="upsertHistList" parameterType="java.util.List">
+        INSERT INTO dr_use_hist60(HIST_TIME, DELT_VAL)
+        <foreach collection="fileList" item="i" separator="UNION">
+            SELECT #{i.HIST_TIME}, #{i.DELT_VAL}
+        </foreach>
+        ON DUPLICATE KEY UPDATE HIST_TIME = VALUES(HIST_TIME), DELT_VAL = VALUES(DELT_VAL)
+    </insert>
+
+    <insert id="upsertHolidayList" parameterType="java.util.List">
+        INSERT INTO holidays(HOLIDAY_DATE, HOLIDAY_DETAIL)
+        <foreach collection="fileList" item="i" separator="UNION">
+            SELECT #{i.HOLIDAY_DATE}, #{i.HOLIDAY_DETAIL}
+        </foreach>
+        ON DUPLICATE KEY UPDATE HOLIDAY_DATE = VALUES(HOLIDAY_DATE), HOLIDAY_DETAIL = VALUES(HOLIDAY_DETAIL)
+    </insert>
+
+    <insert id="insertOne" parameterType="java.util.Map">
+        INSERT INTO dr_use_hist60 (HIST_TIME, DELT_VAL)
+        VALUES (#{HIST_TIME}, #{DELT_VAL})
+        ON DUPLICATE KEY UPDATE HIST_TIME = VALUES(HIST_TIME), DELT_VAL = VALUES(DELT_VAL)
+    </insert>
+
+    <select id="selectDeltValList" resultType="map" parameterType="map">
+        SELECT HIST_TIME,
+               DELT_VAL,
+               TM
+        FROM (
+                SELECT HIST_TIME,
+                       DELT_VAL,
+                       HOUR(HIST_TIME) AS TM,
+                       ROW_NUMBER() OVER (PARTITION BY HOUR(HIST_TIME) ORDER BY DATE(HIST_TIME) DESC) AS RN_DESC
+                FROM dr_use_hist60
+                WHERE HIST_TIME BETWEEN DATE_SUB(#{commandDate}, INTERVAL 20 DAY) AND DATE_SUB(#{commandDate}, INTERVAL 1 HOUR)
+                  AND DATE(HIST_TIME) NOT IN (SELECT HOLIDAY_DATE FROM holidays)
+            ) A
+        WHERE RN_DESC BETWEEN 1 AND 10
+        ORDER BY TM
+    </select>
+
+    <insert id="upsertCblRes" parameterType="java.util.List">
+        INSERT INTO dr_scbl(CBL_TIME, MID610, MID46, MID810)
+        <foreach collection="dataList" item="i" separator="UNION">
+            SELECT STR_TO_DATE(CONCAT(#{i.DATE},' ', #{i.TM}), '%Y-%m-%d %T') AS CBL_TIME,
+                   #{i.MID610},
+                   #{i.MID46},
+                   #{i.MID810}
+        </foreach>
+        ON DUPLICATE KEY UPDATE CBL_TIME = VALUES(CBL_TIME), MID610 = VALUES(MID610), MID46 = VALUES(MID46), MID810 = VALUES(MID810)
+    </insert>
+
+
+        <select id="selectWeekend" resultType="map">
+            SELECT DISTINCT DATE_FORMAT(HIST_TIME, '%Y-%m-%d') AS WEEKEND_DATE, DAYNAME(HIST_TIME) AS WEEKEND_DETAIL
+            FROM dr_use_hist60
+            WHERE DAYNAME(HIST_TIME) IN ('Saturday', 'Sunday');
+        </select>
+
+        <insert id="insertWeekend" parameterType="java.util.List">
+            INSERT INTO holidays(HOLIDAY_DATE, HOLIDAY_DETAIL)
+            <foreach collection="weekendList" item="i" separator="UNION">
+                SELECT #{i.WEEKEND_DATE}, #{i.WEEKEND_DETAIL}
+            </foreach>
+            ON DUPLICATE KEY UPDATE HOLIDAY_DATE = VALUES(HOLIDAY_DATE), HOLIDAY_DETAIL = VALUES(HOLIDAY_DETAIL)
+        </insert>
+
+        <select id="selectHist" resultType="map" parameterType="string">
+            SELECT
+                HIST_TIME,
+                DELT_VAL
+            FROM dr_use_hist60
+            WHERE HIST_TIME = #{dateTime}
+        </select>
+
+        <insert id="insertAllList" parameterType="java.util.List">
+            INSERT INTO dr_use_hist60 (HIST_TIME, DELT_VAL)
+            VALUES
+            <foreach collection="fileList" item="i" index="idx" separator=",">
+                (#{i.HIST_TIME}, #{i.DELT_VAL})
+            </foreach>
+
+            <if test='type!=null || type!=null '>
+
+            </if>
+        </insert>
+
+</mapper>
+

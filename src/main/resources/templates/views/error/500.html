@@ -1,0 +1,43 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Error</title>
+  <link th:inline="css" th:href="@{/css/reset.css}" rel="stylesheet" />
+  <link th:inline="css" th:href="@{/css/default_style.css}" rel="stylesheet"/>
+  <link th:inline="css" th:href="@{/css/sub_style.css}" rel="stylesheet"/>
+
+  <script language="javascript">
+    function fncGoAfterErrorPage() {
+      history.back(-2);
+    }
+    function fnGoManinPage(){
+      alert('main 페이지로 이동');
+      //location.href = "/uat/uia/actionMain.do";
+    }
+  </script>
+</head>
+
+<body>
+
+<div class="error_wrap">
+  <div class="error_box">
+    <div class="error_info">
+      <p class="error_tit">System Error</p>
+      <p class="error_tit2">서비스가 일시적으로 원활하지 않습니다.</p>
+      <p class="txt_error">
+        이용에 불편을 드려 죄송합니다. 잠시후 다시 시도해 주시기 바랍니다.
+      </p>
+    </div>
+    <div class="error_btns">
+      <a href="javascript:fnGoManinPage();" class="subInputBtn typeD">메인페이지로 이동</a>
+      <a href="javascript:fncGoAfterErrorPage();" class="subInputBtn typeC">이전 페이지
+        <!-- 이전 페이지 --></a>
+    </div>
+  </div>
+</div>
+
+
+
+</body>
+
+</html>

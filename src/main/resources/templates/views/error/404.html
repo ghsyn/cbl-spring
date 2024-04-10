@@ -1,0 +1,38 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Error</title>
+	<link th:inline="css" th:href="@{/css/reset.css}" rel="stylesheet" />
+	<link th:inline="css" th:href="@{/css/default_style.css}" rel="stylesheet"/>
+	<link th:inline="css" th:href="@{/css/sub_style.css}" rel="stylesheet"/>
+
+	<script language="javascript">
+		function fncGoAfterErrorPage() {
+			history.back(-2);
+		}
+		function fnGoManinPage(){
+			//location.href = "/uat/uia/actionMain.do";
+			alert("main 페이지로 이동");
+		}
+	</script>
+</head>
+
+<body>
+<div class="error_wrap">
+	<div class="error_box">
+		<div class="error_info">
+			<p class="error_tit">404 Error</p>
+			<p class="error_tit2">페이지를 찾을 수 없습니다.</p>
+			<p class="txt_error">
+				입력하신 주소가 정확한지 다시한번 확인해 주세요.<br>
+				문의사항이 있을 경우 관리자에게 문의하시기 바랍니다.
+			</p>
+		</div>
+		<div class="error_btns">
+			<a href="javascript:fnGoManinPage()" class="subInputBtn typeD">메인페이지로 이동</a>
+			<a href="javascript:fncGoAfterErrorPage();" class="subInputBtn typeC">이전 페이지</a>
+		</div>
+	</div>
+</div>
+</body>
+</html>

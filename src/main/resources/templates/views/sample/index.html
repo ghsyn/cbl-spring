@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<!-- Default Layout Import-->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/default_layout}"
+      layout:fragment="Content"
+>
+<style>
+    body {font-family: Arial;}
+
+    /* Style the tab */
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+    /* Style the buttons inside the tab */
+    .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        font-size: 17px;
+    }
+
+    /* Change background color of buttons on hover */
+    .tab button:hover {
+        background-color: #ddd;
+    }
+
+    /* Create an active/current tablink class */
+    .tab button.active {
+        background-color: #ccc;
+    }
+
+    /* Style the tab content */
+    .content, .subtabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+
+</style>
+</head>
+<body>
+<form cblType="post" action="/file/upload" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <button type="submit">Upload</button>
+</form>
+
+<div class="menubar">
+    <!--    <input type="file" id="openDir"  accept=".csv" onchange="readCsv()" webkitdirectory />-->
+    <input type="file" id="excelFile" onchange="readFile(this, initChart)" accept=".csv"/>
+    <!--    <div class="fileList"></div>-->
+</div>
+
+<!-- Tab links -->
+<div class="tab">
+    <button class="links" onclick="openTab(this, 'tab', 'tab1')">Data Logging</button>
+    <button class="links" onclick="openTab(this, 'tab', 'tab2')">Phased Resolved Analysis(NQP)</button>
+    <button class="links" onclick="openTab(this, 'tab', 'tab3')">Site Location(SL)</button>
+</div>
+
+<!-- Tab content -->
+<div id="tab1" class="tabcontent active">
+    <h3>Data Logging</h3>
+    <div>
+        <input type="button" class="subtablinks" onclick="openTab(this, 'sub', 'subTab1')" value="I(t) & V(t)"/>
+        <input type="button" class="subtablinks" onclick="openTab(this, 'sub', 'subTab2')" value="N(t) & V(t)"/>
+        <input type="button" class="subtablinks" onclick="openTab(this, 'sub', 'subTab3')" value="Q(t) & V(t)"/>
+        <input type="button" class="subtablinks" onclick="openTab(this, 'sub', 'subTab4')" value="Q(V)"/>
+    </div>
+    <div id="subTab1" class="subtabcontent">
+        <fieldset><legend>I Range</legend>
+            <label><input type="radio" name="r1" value="Auto" onclick="drawChart('chart1', 'line', setParams(1), setLayout(1))" checked/>Auto</label>
+            <label><input type="radio" name="r1"  value="Manual" onclick="drawChart('chart1', 'line', setParams(1), setLayout(1))"/>Manual</label>
+            <input type="text"> pA <input type="button" value="Set"/>
+        </fieldset>
+        <fieldset><legend>Q Value</legend>
+            <label><input type="radio" data-name="yaxis y" name="q1" value="Discharge Current (pA)" onclick="drawChart('chart1', 'line', setParams(1), setLayout(1))" checked/>Peak</label>
+            <label><input type="radio" data-name="yaxis y" name="q1" value="Discharge Current (pA)" onclick="drawChart('chart1', 'line', setParams(1), setLayout(1))"/>IEC</label>
+        </fieldset>
+        <fieldset><legend>Voltage Value</legend>
+            <label><input type="radio" data-name="yaxis y2" name="v1" value="Voltage[RMS] (kV)" onclick="drawChart('chart1', 'line', setParams(1), setLayout(1))" checked/>RMS</label>
+            <label><input type="radio" data-name="yaxis y2" name="v1" value="Voltage[Pk/√2] (kV)" onclick="drawChart('chart1', 'line', setParams(1), setLayout(1))"/>PK/√2</label>
+            <label><input type="radio" data-name="yaxis y2" name="v1" value="Voltage[Mean] (kV)" onclick="drawChart('chart1', 'line', setParams(1), setLayout(1))"/>Mean</label>
+        </fieldset>
+        <fieldset><legend>Cursor</legend>
+            <label><input type="radio" name="c1" value="I Cursor" onclick="drawChart('1')"/>I Cursor</label>
+        </fieldset>
+        <div id="chart1" width="800" height="400"></div>
+    </div>
+    <div id="subTab2"  class="subtabcontent">
+        <fieldset><legend>N Range</legend>
+            <label><input type="radio" name="r2" value="Auto" checked onclick='drawChart("chart2", "line", setParams(2), setLayout(2))'/>Auto</label>
+            <label><input type="radio" name="r2" value="Manual" onclick='drawChart("chart2", "line", setParams(2), setLayout(2))'/>Manual</label>
+            <input type="text"> 1/s <input type="button" value="Set" onclick='drawChart("chart2", "line", setParams(2), setLayout(2));'/>
+        </fieldset>
+        <fieldset><legend>Q Value</legend>
+            <label><input type="radio"  data-name="yaxis y" name="q2" value="Pulse Rate (1/s)" onclick='drawChart("chart2", "line", setParams(2), setLayout(2));' checked/>Peak</label>
+            <label><input type="radio"  data-name="yaxis y" name="q2" value="Pulse Rate (1/s)" onclick='drawChart("chart2", "line", setParams(2), setLayout(2));'/>IEC</label>
+        </fieldset>
+        <fieldset><legend>Voltage Value</legend>
+            <label><input type="radio"  data-name="yaxis y2" name="v2" value="Voltage[RMS] (kV)" onclick='drawChart("chart2", "line", setParams(2), setLayout(2));' checked/>RMS</label>
+            <label><input type="radio"  data-name="yaxis y2" name="v2" value="Voltage[Pk/√2] (kV)" onclick='drawChart("chart2", "line", setParams(2), setLayout(2));'/>PK/√2</label>
+            <label><input type="radio"  data-name="yaxis y2" name="v2" value="Voltage[Mean] (kV)" onclick='drawChart("chart2", "line", setParams(2), setLayout(2));'/>Mean</label>
+        </fieldset>
+        <fieldset><legend>Cursor</legend>
+            <label><input type="radio" name="c2" value="N Cursor" onclick="drawChart('2')"/>N Cursor</label>
+        </fieldset>
+        <div id="chart2" width="800" height="400"></div>
+    </div>
+    <div id="subTab3" class="subtabcontent">
+        <fieldset><legend>Q Range</legend>
+            <label><input type="radio" name="r3" value="Auto" onclick='drawChart("chart3", "line", setParams(3), setLayout(3));' checked/>Auto</label>
+            <label><input type="radio" name="r3" value="Manual" onclick='drawChart("chart3", "line", setParams(3), setLayout(3));'/>Manual</label>
+            <input type="text" value="1.0"> pC<input type="button" value="Set" onclick='drawChart("chart3", "line", setParams(3), setLayout(3));'/>
+            <label><input type="radio" name="r3" value="Logarithmic Q"/>Logarithmic Q</label>
+        </fieldset>
+        <fieldset><legend>Q Level</legend>
+            <label><input type="radio"  data-name="yaxis y" name="q3" value="Q[Pk] (pC)" onclick='drawChart("chart3", "line", setParams(3), setLayout(3));' checked/>Peak</label>
+            <label><input type="radio"  data-name="yaxis y" name="q3" value="Q[IEC] (pC)" onclick='drawChart("chart3", "line", setParams(3), setLayout(3));' />IEC</label>
+        </fieldset>
+        <fieldset><legend>Voltage Value</legend>
+            <label><input type="radio"  data-name="yaxis y2" name="v3" value="Voltage[RMS] (kV)" onclick='drawChart("chart3", "line", setParams(3), setLayout(3));' checked/>RMS</label>
+            <label><input type="radio"  data-name="yaxis y2" name="v3" value="Voltage[Pk/√2] (kV)" onclick='drawChart("chart3", "line", setParams(3), setLayout(3));'/>PK/√2</label>
+            <label><input type="radio"  data-name="yaxis y2" name="v3" value="Voltage[Mean] (kV)" onclick='drawChart("chart3", "line", setParams(3), setLayout(3));'/>Mean</label>
+        </fieldset>
+        <fieldset><legend>Cursor</legend>
+            <label><input type="checkbox" name="c3" value="Q Cursor"/>Q Cursor</label>
+        </fieldset>
+        <div id="chart3" width="800" height="400"></div>
+    </div>
+    <div id="subTab4" class="subtabcontent">
+        <fieldset><legend>Q Range</legend>
+            <label><input type="radio" name="r4" value="Auto" onclick='drawChart("chart4", "line", setParams(4), setLayout(4));' checked/>Auto</label>
+            <label><input type="radio" name="r4" value="Manual" />Manual</label>
+            <input type="text" value="1.0"> pC<input type="button" value="Set" onclick="drawChart('4')"/>
+        </fieldset>
+        <fieldset><legend>Q Level</legend>
+            <label><input type="radio"  data-name="yaxis y" name="q4" value="Q[Pk] (pC)" onclick='drawChart("chart4", "line", setParams(4), setLayout(4));' checked/>Peak</label>
+            <label><input type="radio"  data-name="yaxis y" name="q4" value="Q[IEC] (pC)"  onclick='drawChart("chart4", "line", setParams(4), setLayout(4));' />IEC</label>
+        </fieldset>
+        <fieldset><legend>Q(V) Logging</legend>
+            <label><input type="radio" name="logging" value="Peak"  onclick='drawChart("chart4", "line", setParams(4), setLayout(4));' />Show warning message when switching input(Q(V) logging data will be deleted when disabled)</label>
+        </fieldset>
+        <fieldset><legend>Voltage Value</legend>
+            <label><input type="radio"  data-name="xaxis x" name="v4" value="Voltage[RMS] (kV)"  onclick='drawChart("chart4", "line", setParams(4), setLayout(4));'  checked/>RMS</label>
+            <label><input type="radio"  data-name="xaxis x" name="v4" value="Voltage[Pk/√2] (kV)" onclick='drawChart("chart4", "line", setParams(4), setLayout(4));' />PK/√2</label>
+            <label><input type="radio"   data-name="xaxis x" name="v4" value="Voltage[Mean] (kV)" onclick='drawChart("chart4", "line", setParams(4), setLayout(4));' />Mean</label>
+        </fieldset>
+        <div id="chart4" width="800" height="400"></div>
+    </div>
+    <div id="tester" style="width:600px;height:250px;"></div>
+
+</div>
+
+<div id="tab2" class="tabcontent">
+    <input type="button" onclick="drawHeatMap()" value="히트맵"/>
+    <div id='heatMap'><!-- Plotly chart will be drawn inside this DIV --></div>
+</div>
+
+<div id="tab3" class="tabcontent">
+    <h3>Site Location(SL)</h3>
+    <p></p>
+</div>
+
+<script>
+    function openTab(obj, opt, tab) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName(opt+"tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName(opt+"tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tab).style.display = "block";
+        this.className += " active";
+    }
+</script>
+</body>
+</html>

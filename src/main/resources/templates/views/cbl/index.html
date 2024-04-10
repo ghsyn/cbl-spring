@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/default_layout}"
+      layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>CBL</title>
+    <script type="text/javascript" th:src="@{/js/cbl/cbl.js}"></script>
+</head>
+<style>
+    .box {
+        padding: 5px 12px;
+        margin: 12px;
+        border: 1px solid black;
+    }
+
+    .setdate {
+        float: left;
+        width: 50%;
+        text-align: center;
+        margin-top: auto;
+    }
+
+    .btn {
+        margin: 12px;
+    }
+
+</style>
+<body>
+
+<!--오늘 : 오늘 날짜에 해당하는 모든 시간대의 CBL-->
+<!--최근 : 저장된 데이터 중 가장 최신인 24개의 CBL-->
+<!--검색 : 입력한 날짜에 해당하는 모든 시간대의 CBL-->
+<div class="box">
+    <h1>전력 사용량 차트</h1>
+</div>
+
+<!-- Set Date -->
+<div class="setdate">
+    <input type="button" onclick="shiftDate(value)" value="<"/>
+    <input type='date' id='commandDate' required/>
+    <input type="button" id="afterbtn" disabled onclick="shiftDate(value)" value=">"/>
+</div>
+
+<!-- Tab links -->
+<div class="btn">
+    <input type="button" id="bntToday" value="오늘" onclick="getCBL('Today', '/cbl', 'POST', {'commandDate' : new Date().format('yyyy-MM-dd')})"/>
+    <input type="button" id="bntRecent" value="최근" onclick="getCBL('Recent', '/cbl/limit', 'POST', {'commandDate' : new Date().format('yyyy-MM-dd'), 'limit' : 12})"/>
+    <input type="button" id="bntSearch" value="검색" onclick="getCBL('Search', '/cbl', 'POST', {'commandDate' : $('#commandDate').val()})"/>
+</div>
+
+<!-- Show Data -->
+<div id="cblChart"></div>
+<div id="cblGrid"></div>
+
+</body>
+</html>

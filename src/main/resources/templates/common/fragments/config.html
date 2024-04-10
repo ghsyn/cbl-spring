@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<!--Thymeleaf, ConfigFragment 선언-->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="ConfigFragment">
+<head>
+    <!--Common Head-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport"
+          content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0"/>
+    <title></title>
+    <!-- favicon 무시 -->
+    <link rel="icon" href="data:,">
+    <!--Common CSS -->
+    <link th:inline="css" th:href="@{/css/grid/tui-grid.css}" rel="stylesheet"/>
+    <link th:inline="css" th:href="@{/css/grid/tui-date-picker.css}" rel="stylesheet"/>
+    <link th:inline="css" th:href="@{/css/grid/tui-time-picker.css}" rel="stylesheet"/>
+
+    <!--Common JS-->
+    <script type="text/javascript" th:src="@{/js/jquery/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/js/grid/tui-grid.js}"></script>
+    <script type="text/javascript" th:src="@{/js/grid/tui-pagination.js}"></script>
+    <script type="text/javascript" th:src="@{/js/pollyfill/polyfill.js}"></script>
+<!--    <script type="text/javascript" th:src="@{/js/chart/plotly/plotly-2.27.0.min.js}"></script>-->
+    <script type="text/javascript" th:src="@{/js/chart/plotly/v2.28.0/plotly.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common/read_file.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common/chartBuilder.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common/plotlyChart.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common/drawChart.js}"></script>
+    <script type="text/javascript" th:src="@{/js/CryptoJS v3.1.2/rollups/aes.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common/comtran.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common/comutil.js}"></script>
+
+</head>
+</html>
